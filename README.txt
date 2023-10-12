@@ -12,7 +12,7 @@ He/She will have to carefully select her opponents throughout all 40 levels. For
 (Each of enemies has different unique skills and spells, and different stats that change depending on their own level)
 
 After each victory, the hero will be given the right to choose rewards, representing different types of equipment (at this stage - weapons, armor, boots, helmets) to equip to improve his performance.
-Each type of gear has individual stats (from 4 for helmets and boots, 5 for weapons and 8 for armor)
+Each type of gear has individual stats (from 4 for helmets and boots, 5 for weapons and 8 for armors)
 
 The weapons themselves also vary in 7 different types (Axes, Hammers, Swords, Bows, Staffs, Crossbows, and Scepters), each with its own advantages based on its type.
 	
