@@ -28,7 +28,7 @@ public class Weapon extends Item {
         itemName = "Wood Club";
         itemMinDMG = 4;
         itemMaxDMG = 6;
-        itemAttackSpeed = 1;
+        itemAttackSpeed = 0.9;
     }
 
     public Weapon() {
@@ -47,8 +47,8 @@ public class Weapon extends Item {
 
     public String showItemStats() {
         String heroWeapon = String.format("%n   " + getItemName() + "%n   LVL:   " + getItemLVL() + "%n   DMG: " +
-                getItemMinDMG() + "-" + getItemMaxDMG() + "%n   AS:  %.2f" + "%n   Crit%%: " + getItemCriticalChance() +
-                "%n   Stun%%: " + getItemStunChance() + "%n   S.Pwr: " + getItemSpellPower(), getItemAttackSpeed());
+                getWeaponMinDMG() + "-" + getWeaponMaxDMG() + "%n   AS:  %.2f" + "%n   Crit%%: " + getItemCriticalChance() +
+                "%n   Stun%%: " + getItemStunChance() + "%n   S.Pwr: " + getWeaponSpellPower(), getItemAttackSpeed());
         return heroWeapon;
     }
 
@@ -65,11 +65,11 @@ public class Weapon extends Item {
         return this.wepType;
     }
 
-    public int getItemMinDMG() {
+    public int getWeaponMinDMG() {
         return this.itemMinDMG;
     }
 
-    public int getItemMaxDMG() {
+    public int getWeaponMaxDMG() {
         return this.itemMaxDMG;
     }
 
@@ -85,7 +85,7 @@ public class Weapon extends Item {
         return this.itemStunChance;
     }
 
-    public int getItemSpellPower() {
+    public int getWeaponSpellPower() {
         return this.itemSpellPower;
     }
 
@@ -110,53 +110,53 @@ public class Weapon extends Item {
         this.itemLVL = getItemLVL();
 
         if (this.getWeaponType().equals("Axe")) {
-            this.itemMinDMG = 2 + (getItemLVL() * 4);
-            this.itemMaxDMG = this.itemMinDMG + (getItemLVL() * 2);
+            this.itemMinDMG = 2 + (this.itemLVL * 4);
+            this.itemMaxDMG = this.itemMinDMG + (this.itemLVL * 2);
             this.itemAttackSpeed = 0.9 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.01);
             this.itemCriticalChance = itemLVL;
-            this.itemStunChance = (int) (getItemLVL() * 0.334);
+            this.itemStunChance = (int) (this.itemLVL * 0.334);
             this.itemSpellPower = 0;
         } else if (this.getWeaponType().equals("Hammer")) {
-            this.itemMinDMG = 2 + (getItemLVL() * 5);
-            this.itemMaxDMG = this.itemMinDMG + 1 + (getItemLVL() * 2);
+            this.itemMinDMG = 2 + (this.itemLVL * 5);
+            this.itemMaxDMG = this.itemMinDMG + 1 + (this.itemLVL * 2);
             this.itemAttackSpeed = 1.0 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.015);
             this.itemCriticalChance = 0;
-            this.itemStunChance = (int) (getItemLVL() * 1.25);
+            this.itemStunChance = (int) (this.itemLVL * 1.25);
             this.itemSpellPower = 0;
         } else if (this.getWeaponType().equals("Sword")) {
-            this.itemMinDMG = 3 + (getItemLVL() * 2);
-            this.itemMaxDMG = this.itemMinDMG + 1 + getItemLVL();
+            this.itemMinDMG = 3 + (this.itemLVL * 2);
+            this.itemMaxDMG = this.itemMinDMG + 1 + this.itemLVL;
             this.itemAttackSpeed = 0.75 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.01);
             this.itemCriticalChance = 1 + itemLVL;
-            this.itemStunChance = (int) (getItemLVL() * 0.25);
-            this.itemSpellPower = (int) (getItemLVL() * 0.334);
+            this.itemStunChance = (int) (this.itemLVL * 0.25);
+            this.itemSpellPower = (int) (this.itemLVL * 0.334);
         } else if (this.getWeaponType().equals("Bow")) {
-            this.itemMinDMG = 2 + (getItemLVL() * 2);
+            this.itemMinDMG = 2 + (this.itemLVL * 2);
             this.itemMaxDMG = this.itemMinDMG + (int) (getItemLVL() * 1.5);
             this.itemAttackSpeed = 0.66 - (this.itemLVL * 0.01);
             this.itemCriticalChance = 1 + (int) (this.itemLVL * 1.334);
             this.itemStunChance = 0;
             this.itemSpellPower = (int) (this.itemLVL * 0.5);
         } else if (this.getWeaponType().equals("Crossbow")) {
-            this.itemMinDMG = 2 + (int) (getItemLVL() * 2.5);
-            this.itemMaxDMG = this.itemMinDMG + 2 + getItemLVL();
+            this.itemMinDMG = 2 + (int) (this.itemLVL * 2.5);
+            this.itemMaxDMG = this.itemMinDMG + 2 + this.itemLVL;
             this.itemAttackSpeed = 0.80 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.01);
-            this.itemCriticalChance = 1 + (int) (0.34 * itemLVL);
-            this.itemStunChance = (int) (getItemLVL() * 0.5);
+            this.itemCriticalChance = 1 + (int) (0.5 * this.itemLVL);
+            this.itemStunChance = (int) (this.itemLVL * 0.5);
             this.itemSpellPower = 0;
         } else if (this.getWeaponType().equals("Staff")) {
-            this.itemMinDMG = 2 + (int) (getItemLVL() * 2.5);
-            this.itemMaxDMG = this.itemMinDMG + 1 + getItemLVL();
+            this.itemMinDMG = 2 + (int) (this.itemLVL * 2.5);
+            this.itemMaxDMG = this.itemMinDMG + 1 + this.itemLVL;
             this.itemAttackSpeed = 0.85 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.015);
-            this.itemCriticalChance = (int) (0.5 * itemLVL);
-            this.itemStunChance = (int) (getItemLVL() * 0.334);
-            this.itemSpellPower = (int) (getItemLVL() * 0.75);
+            this.itemCriticalChance = (int) (0.334 * this.itemLVL);
+            this.itemStunChance = (int) (this.itemLVL * 0.334);
+            this.itemSpellPower = (int) (this.itemLVL * 0.75);
         } else if (this.getWeaponType().equals("Scepter")) {
-            this.itemMinDMG = 1 + (int) (getItemLVL() * 2.5);
-            this.itemMaxDMG = this.itemMinDMG + 2 + getItemLVL();
+            this.itemMinDMG = 1 + (int) (this.itemLVL * 2.5);
+            this.itemMaxDMG = this.itemMinDMG + 2 + this.itemLVL;
             this.itemAttackSpeed = 0.80 - (rand.nextInt(GameEngine.player1.getHeroLVL() + 1) * 0.01);
             this.itemCriticalChance = 1 + (int) (0.334 * itemLVL);
-            this.itemStunChance = (int) (getItemLVL() * 0.75);
+            this.itemStunChance = (int) (this.itemLVL * 0.75);
             this.itemSpellPower = 0;
         }
     }
@@ -168,12 +168,15 @@ public class Weapon extends Item {
         double monsterLVLBonuses;
 
         if (GameEngine.playerGameProgress == 0) {
-            monsterLVLBonuses = 0;
+                monsterLVLBonuses = 0;
         } else {
             if (GameEngine.playerGameProgress % 5 == 0) {
                 monsterLVLBonuses = 2;
             } else {
-                monsterLVLBonuses = (GameEngine.enemy.getMonsterLVL() - (1 - GameEngine.playerGameProgress / 5));
+                monsterLVLBonuses = GameEngine.enemy.getMonsterLVL() - GameEngine.player1.getHeroHelmLVL();
+                if (monsterLVLBonuses < 0) {
+                    monsterLVLBonuses = 0;
+                }
             }
         }
         ArrayList<String> itemBonus = new ArrayList<>(Arrays.asList("Max DMG", "AS", "Crit%", "Stun%", "S.Pwr",
@@ -200,15 +203,15 @@ public class Weapon extends Item {
     @Override
     void itemStatsForPrinting() {
         String whiteSpaces = "                              ";
-        String fullDMG = getItemMinDMG() + "-" + getItemMaxDMG();
+        String fullDMG = getWeaponMinDMG() + "-" + getWeaponMaxDMG();
         this.itemStat1 = "DMG:" + whiteSpaces.substring(0, 8 - fullDMG.length()) + fullDMG;
         this.itemStat2 = String.format("AS:" + whiteSpaces.substring(0, 5) + "%.2f", getItemAttackSpeed());
         this.itemStat3 = "Crit%%:" + whiteSpaces.substring(0, 6 - Integer.toString(getItemCriticalChance()).length()) +
                 String.valueOf(getItemCriticalChance());
         this.itemStat4 = "Stun%%:" + whiteSpaces.substring(0, 6 - Integer.toString(getItemStunChance()).length()) +
                 String.valueOf(getItemStunChance());
-        this.itemStat5 = "S.Pwr:" + whiteSpaces.substring(0, 6 - Integer.toString(getItemSpellPower()).length()) +
-                String.valueOf(getItemSpellPower());
+        this.itemStat5 = "S.Pwr:" + whiteSpaces.substring(0, 6 - Integer.toString(getWeaponSpellPower()).length()) +
+                String.valueOf(getWeaponSpellPower());
         this.itemStat6 = whiteSpaces.substring(0, 12);
         this.itemStat7 = whiteSpaces.substring(0, 12);
         this.itemStat8 = whiteSpaces.substring(0, 12);

@@ -106,7 +106,10 @@ public class Armor extends Item {
             if (GameEngine.playerGameProgress % 5 == 0) {
                 monsterLVLBonuses = 2;
             } else {
-                monsterLVLBonuses = (GameEngine.enemy.getMonsterLVL() - (1 + GameEngine.playerGameProgress / 5));
+                monsterLVLBonuses = GameEngine.enemy.getMonsterLVL() - GameEngine.player1.getHeroHelmLVL();
+                if (monsterLVLBonuses < 0) {
+                    monsterLVLBonuses = 0;
+                }
             }
         }
 
@@ -118,7 +121,7 @@ public class Armor extends Item {
             itemBonus.get(0);
 
             if (itemBonus.get(0).equals("Shield")) {
-                this.itemShield += getItemLVL() + monsterLVLBonuses;
+                this.itemShield += 2 * getItemLVL() + monsterLVLBonuses;
             } else if (itemBonus.get(0).equals("Health")) {
                 this.itemHP += 1 + (getItemLVL() * 4) + (monsterLVLBonuses * getItemLVL());
             } else if (itemBonus.get(0).equals("HP.Reg")) {

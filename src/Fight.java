@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Fight<privte> {
     private static int turnCounter = 0;
     private final static int AFTER_BATTLE_PRIZE_QUANTITY = 4;
-    private static Item[] test = new Item[AFTER_BATTLE_PRIZE_QUANTITY + 1];
+    private static Item[] prizeItem = new Item[AFTER_BATTLE_PRIZE_QUANTITY + 1];
 
     private static String[] itemSets = {"Death's", "King's", "Rush's", "Great", "Devil's", "Justice's", "Dragon's",
             "Hell's", "Crusher's", "Bone's", "Ghost"};
@@ -222,7 +222,7 @@ public class Fight<privte> {
             System.out.println();
             System.out.println();
 
-            if (GameEngine.player1.getHeroSpellList().size() >= 6) {
+            if (GameEngine.player1.getHeroSpellList().size() > 6) {
                 for (int i = 6; i < GameEngine.player1.getHeroSpellList().size(); i++) {
                     System.out.printf(GameEngine.player1.getHeroSpellList().get(i).getSpellDescriptionRow1() + whitеSpaces.substring(0, 8));
                 }
@@ -465,7 +465,7 @@ public class Fight<privte> {
                 heroCastSpell();
             }
         } else if (chosenSpellForCasting.equals("12")) {
-            if (GameEngine.player1.getHeroSpellList().size() < 2) {
+            if (GameEngine.player1.getHeroSpellList().size() < 12) {
                 System.out.println("There is no magic (12)!");
                 printHeroSpellBook();
                 heroCastSpell();
@@ -485,6 +485,9 @@ public class Fight<privte> {
         chosenSpellForCasting = " ";
         System.out.println();
         Thread.sleep(2000L);
+        if (GameEngine.enemy.getMonsterHealth() < 0) {
+            GameEngine.enemy.setMonsterHealth(0);
+        }
         combatTurnOverview();
     }
 
@@ -613,9 +616,10 @@ public class Fight<privte> {
         GameEngine.player1.setHeroShield(GameEngine.player1.getHeroBaseShield() + GameEngine.player1.armor.getItemShield());
         GameEngine.player1.setHeroEvasionChance();
         GameEngine.player1.setHeroMinDMG();
-        GameEngine.player1.setHeroMaxDMG(GameEngine.player1.getHeroBaseDamage() + GameEngine.player1.weapon.getItemMaxDMG());
+        GameEngine.player1.setHeroMaxDMG(GameEngine.player1.getHeroBaseDamage() + GameEngine.player1.weapon.getWeaponMaxDMG());
         GameEngine.player1.setHeroCritChance();
-        GameEngine.player1.setHeroAttackSpeed(GameEngine.player1.getHeroBaseAttackSpeed() + GameEngine.player1.getHeroWeaponAttackSpeed());
+        GameEngine.player1.setHeroAttackSpeed(GameEngine.player1.getHeroBaseAttackSpeed() +
+                GameEngine.player1.getHeroWeaponAttackSpeed() + GameEngine.player1.getHeroBootsAttackSpeed());
         GameEngine.player1.setHeroStunChance();
         GameEngine.player1.setHeroSpellPower();
         GameEngine.player1.setHeroMagicResistance();
@@ -633,113 +637,126 @@ public class Fight<privte> {
     private static void afterBattleMonsterSkillRestore() {
         Monster.CursingCast = false;
         Monster.skeletonArmorIncreasment = false;
-        Monster.hydraLifeTracker = 250;
+        Monster.hydraLifeTracker = 800;
         Monster.lichKingPoisonActivation = false;
+        Monster.lichKingTotalPoisonDMG = 0;
     }
 
     private static void generateItemPrize() {
         Random rand = new Random();
-        String[] itemModels = {"WEAPON", "ARMOR", "HELM"};
+        String[] itemModels = {"WEAPON", "ARMOR", "HELM", "BOOTS"};
 
         for (int i = 1; i < AFTER_BATTLE_PRIZE_QUANTITY + 1; i++) {
             int generateItemRandomModel = rand.nextInt(itemModels.length);
             String itemModel = itemModels[generateItemRandomModel];
 
             if (itemModel.equals("WEAPON")) {
-                test[i] = new Weapon();
-                test[i].setItemModel("WEAPON");
+                prizeItem[i] = new Weapon();
+                prizeItem[i].setItemModel("WEAPON");
             } else if (itemModel.equals("ARMOR")) {
-                test[i] = new Armor();
-                test[i].setItemModel("ARMOR");
+                prizeItem[i] = new Armor();
+                prizeItem[i].setItemModel("ARMOR");
             } else if (itemModel.equals("HELM")) {
-                test[i] = new Helm();
-                test[i].setItemModel("HELM");
+                prizeItem[i] = new Helm();
+                prizeItem[i].setItemModel("HELM");
+            } else if (itemModel.equals("BOOTS")) {
+                prizeItem[i] = new Boots();
+                prizeItem[i].setItemModel("BOOTS");
             }
         }
     }
 
     private static void printRandomItemPrizes() {
-        System.out.println("Prize I:                  Prize II:                 Prize III:                Prize IV: " +
-                "                      HERO WEAPON:          HERO ARMOR:          HERO HELM:");
-        System.out.printf("%s" + whitеSpaces.substring(test[1].getItemName().length(), 26) + "%s" +
-                        whitеSpaces.substring(test[2].getItemName().length(), 26) + "%s" +
-                        whitеSpaces.substring(test[3].getItemName().length(), 26) + "%s" +
-                        whitеSpaces.substring(test[4].getItemName().length(), 26) + "      %s" +
+        System.out.println("Prize I:              Prize II:             Prize III:            Prize IV: " +
+                "                      HERO WEAPON:          HERO ARMOR:          HERO HELM:          HERO BOOTS:");
+        System.out.printf("%s" + whitеSpaces.substring(prizeItem[1].getItemName().length(), 22) + "%s" +
+                        whitеSpaces.substring(prizeItem[2].getItemName().length(), 22) + "%s" +
+                        whitеSpaces.substring(prizeItem[3].getItemName().length(), 22) + "%s" +
+                        whitеSpaces.substring(prizeItem[4].getItemName().length(), 22) + "          %s" +
                         whitеSpaces.substring(GameEngine.player1.getHeroWeaponName().length(), 22) +
                         "%s" + whitеSpaces.substring(GameEngine.player1.getHeroArmorName().length(), 21) +
-                        "%s%n", test[1].getItemName(), test[2].getItemName(),
-                test[3].getItemName(), test[4].getItemName(), GameEngine.player1.getHeroWeaponName(),
-                GameEngine.player1.getHeroArmorName(), GameEngine.player1.getHeroHelmName());
-        System.out.printf("LVL: %d                    LVL: %d                    LVL: %d                    LVL: %d" +
+                        "%s" + whitеSpaces.substring(GameEngine.player1.getHeroHelmName().length(), 20) + "%s%n",
+                prizeItem[1].getItemName(), prizeItem[2].getItemName(), prizeItem[3].getItemName(), prizeItem[4].getItemName(),
+                GameEngine.player1.getHeroWeaponName(), GameEngine.player1.getHeroArmorName(),
+                GameEngine.player1.getHeroHelmName(), GameEngine.player1.getHeroBootsName());
+        System.out.printf("LVL: %d                LVL: %d                LVL: %d                LVL: %d" +
                         "                          LVL: %d" +
                         whitеSpaces.substring(Integer.toString(GameEngine.player1.getHeroLVL()).length(), 17) + "LVL: %d" +
-                        "               LVL: %d%n", test[1].getItemLVL(), test[2].getItemLVL(),
-                test[3].getItemLVL(), test[4].getItemLVL(), GameEngine.player1.getHeroWeaponLVL(),
-                GameEngine.player1.getHeroArmorLVL(), GameEngine.player1.getHeroHelmLVL());
+                        "               LVL: %d" + whitеSpaces.substring(Integer.toString(GameEngine.player1.getHeroLVL()).length(), 15) +
+                        "LVL: %d%n", prizeItem[1].getItemLVL(), prizeItem[2].getItemLVL(), prizeItem[3].getItemLVL(), prizeItem[4].getItemLVL(),
+                GameEngine.player1.getHeroWeaponLVL(), GameEngine.player1.getHeroArmorLVL(),
+                GameEngine.player1.getHeroHelmLVL(), GameEngine.player1.getHeroBootsLVL());
 
-        System.out.printf(test[1].itemStat1 + whitеSpaces.substring(0, 14) + test[2].itemStat1 + whitеSpaces.substring(0, 14) +
-                        test[3].itemStat1 + whitеSpaces.substring(0, 14) + test[4].itemStat1 + whitеSpaces.substring(0, 20) +
+        System.out.printf(prizeItem[1].itemStat1 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat1 + whitеSpaces.substring(0, 10) +
+                        prizeItem[3].itemStat1 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat1 + whitеSpaces.substring(0, 20) +
                         "DMG:" + whitеSpaces.substring(0, 8 - (Integer.toString(GameEngine.player1.getHeroWeaponMinDMG()).length() +
                         1 + Integer.toString(GameEngine.player1.getHeroWeaponMaxDMG()).length())) + "%d-%d" +
                         whitеSpaces.substring(0, 10) + "Armor:" +
                         whitеSpaces.substring(0, 7 - Integer.toString(GameEngine.player1.armor.getItemArmor()).length()) +
                         "%s" + whitеSpaces.substring(0, 8) + "Health:" +
                         whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.helm.getItemHP()).length()) +
-                        "%s%n", GameEngine.player1.getHeroWeaponMinDMG(), GameEngine.player1.getHeroWeaponMaxDMG(),
-                GameEngine.player1.armor.getItemArmor(), GameEngine.player1.helm.getItemHP());
-        System.out.printf(test[1].itemStat2 + whitеSpaces.substring(0, 14) + test[2].itemStat2 +
-                        whitеSpaces.substring(0, 14) + test[3].itemStat2 + whitеSpaces.substring(0, 14) + test[4].itemStat2 +
+                        "%s" + whitеSpaces.substring(0, 7) + "HP.Reg:  %.2f%n", GameEngine.player1.getHeroWeaponMinDMG(),
+                GameEngine.player1.getHeroWeaponMaxDMG(), GameEngine.player1.armor.getItemArmor(),
+                GameEngine.player1.helm.getItemHP(), GameEngine.player1.boots.getItemHPReg());
+        System.out.printf(prizeItem[1].itemStat2 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat2 +
+                        whitеSpaces.substring(0, 10) + prizeItem[3].itemStat2 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat2 +
                         whitеSpaces.substring(0, 20) + "AS:" + whitеSpaces.substring(0, 5) + "%.2f" +
                         whitеSpaces.substring(0, 10) + "Health:" +
                         whitеSpaces.substring(0, 8 - Double.toString(GameEngine.player1.armor.getItemHP()).length()) +
                         "%d" + whitеSpaces.substring(0, 8) + "Shield:" +
                         whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.helm.getItemShield()).length()) +
+                        "%d" + whitеSpaces.substring(0, 7) + "Evsn:" +
+                        whitеSpaces.substring(0, 8 - Integer.toString(GameEngine.player1.boots.getItemEvasionChance()).length()) +
                         "%d%n", GameEngine.player1.weapon.getItemAttackSpeed(), GameEngine.player1.armor.getItemHP(),
-                GameEngine.player1.helm.getItemShield());
-        System.out.printf(test[1].itemStat3 + whitеSpaces.substring(0, 14) + test[2].itemStat3 + whitеSpaces.substring(0, 14) +
-                test[3].itemStat3 + whitеSpaces.substring(0, 14) + test[4].itemStat3 + whitеSpaces.substring(0, 42) +
-                "Shield:" + whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.armor.getItemShield()).length()) +
-                GameEngine.player1.armor.getItemShield() + whitеSpaces.substring(0, 8) + "S.Pwr:" +
-                whitеSpaces.substring(0, 7 - Integer.toString(GameEngine.player1.helm.getItemSpellPower()).length()) +
-                GameEngine.player1.helm.getItemSpellPower() + "%n");
-        System.out.printf(test[1].itemStat4 + whitеSpaces.substring(0, 14) + test[2].itemStat4 + whitеSpaces.substring(0, 14) +
-                        test[3].itemStat4 + whitеSpaces.substring(0, 14) + test[4].itemStat4 + whitеSpaces.substring(0, 20) +
+                GameEngine.player1.helm.getItemShield(), GameEngine.player1.boots.getItemEvasionChance());
+        System.out.printf(prizeItem[1].itemStat3 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat3 + whitеSpaces.substring(0, 10) +
+                        prizeItem[3].itemStat3 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat3 + whitеSpaces.substring(0, 42) +
+                        "Shield:" + whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.armor.getItemShield()).length()) +
+                        GameEngine.player1.armor.getItemShield() + whitеSpaces.substring(0, 8) + "S.Pwr:" +
+                        whitеSpaces.substring(0, 7 - Integer.toString(GameEngine.player1.helm.getItemSpellPower()).length()) +
+                        GameEngine.player1.helm.getItemSpellPower() + whitеSpaces.substring(0, 7) + "M.Reg: " + "  %.2f%n",
+                GameEngine.player1.boots.getItemManaReg());
+        System.out.printf(prizeItem[1].itemStat4 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat4 + whitеSpaces.substring(0, 10) +
+                        prizeItem[3].itemStat4 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat4 + whitеSpaces.substring(0, 20) +
                         "Crit%%:" +
                         whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.weapon.getItemCriticalChance()).length()) +
                         "%d" + whitеSpaces.substring(0, 10) + "HP.Reg:  %.2f" + whitеSpaces.substring(0, 8) + "Resist:" +
                         whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.helm.getItemMagicResistance()).length()) +
-                        GameEngine.player1.helm.getItemMagicResistance() + "%n", GameEngine.player1.weapon.getItemCriticalChance(),
-                GameEngine.player1.armor.getItemHPReg());
-        System.out.printf(test[1].itemStat5 + whitеSpaces.substring(0, 14) + test[2].itemStat5 + whitеSpaces.substring(0, 14) +
-                test[3].itemStat5 + whitеSpaces.substring(0, 14) + test[4].itemStat5 + whitеSpaces.substring(0, 20) +
+                        GameEngine.player1.helm.getItemMagicResistance() + whitеSpaces.substring(0, 7) + "AS:   " +
+                        whitеSpaces.substring(0, 8 - Double.toString(GameEngine.player1.boots.getItemAttackSpeed()).length()) +
+                        "%.2f%n", GameEngine.player1.weapon.getItemCriticalChance(), GameEngine.player1.armor.getItemHPReg(),
+                GameEngine.player1.boots.getItemAttackSpeed());
+        System.out.printf(prizeItem[1].itemStat5 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat5 + whitеSpaces.substring(0, 10) +
+                prizeItem[3].itemStat5 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat5 + whitеSpaces.substring(0, 20) +
                 "Stun%%:" + whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.weapon.getItemStunChance()).length()) +
                 "%d" + whitеSpaces.substring(0, 10) + "Evsn%%:" +
                 whitеSpaces.substring(0, 7 - Integer.toString(GameEngine.player1.armor.getItemEvasionChance()).length()) +
                 "%d%n", GameEngine.player1.weapon.getItemStunChance(), GameEngine.player1.armor.getItemEvasionChance());
-        System.out.printf(test[1].itemStat6 + whitеSpaces.substring(0, 14) + test[2].itemStat6 + whitеSpaces.substring(0, 14) +
-                test[3].itemStat6 + whitеSpaces.substring(0, 14) + test[4].itemStat6 + whitеSpaces.substring(0, 20) +
-                "S.Pwr:" + whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.weapon.getItemSpellPower()).length()) +
+        System.out.printf(prizeItem[1].itemStat6 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat6 + whitеSpaces.substring(0, 10) +
+                prizeItem[3].itemStat6 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat6 + whitеSpaces.substring(0, 20) +
+                "S.Pwr:" + whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.weapon.getWeaponSpellPower()).length()) +
                 "%d" + whitеSpaces.substring(0, 10) +
                 "S.Pwr:" + whitеSpaces.substring(0, 7 - Integer.toString(GameEngine.player1.armor.getItemSpellPower()).length()) +
-                "%d%n", GameEngine.player1.weapon.getItemSpellPower(), GameEngine.player1.armor.getItemSpellPower());
-        System.out.printf(test[1].itemStat7 + whitеSpaces.substring(0, 14) + test[2].itemStat7 + whitеSpaces.substring(0, 14) +
-                test[3].itemStat7 + whitеSpaces.substring(0, 14) + test[4].itemStat7 + whitеSpaces.substring(0, 20) +
+                "%d%n", GameEngine.player1.weapon.getWeaponSpellPower(), GameEngine.player1.armor.getItemSpellPower());
+        System.out.printf(prizeItem[1].itemStat7 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat7 + whitеSpaces.substring(0, 10) +
+                prizeItem[3].itemStat7 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat7 + whitеSpaces.substring(0, 20) +
                 whitеSpaces.substring(0, 22) + "Resist:" +
                 whitеSpaces.substring(0, 6 - Integer.toString(GameEngine.player1.armor.getItemMagicResistance()).length()) +
                 "%d%n", GameEngine.player1.armor.getItemMagicResistance());
-        System.out.printf(test[1].itemStat8 + whitеSpaces.substring(0, 14) + test[2].itemStat8 + whitеSpaces.substring(0, 14) +
-                        test[3].itemStat8 + whitеSpaces.substring(0, 14) + test[4].itemStat8 + whitеSpaces.substring(0, 20) +
+        System.out.printf(prizeItem[1].itemStat8 + whitеSpaces.substring(0, 10) + prizeItem[2].itemStat8 + whitеSpaces.substring(0, 10) +
+                        prizeItem[3].itemStat8 + whitеSpaces.substring(0, 10) + prizeItem[4].itemStat8 + whitеSpaces.substring(0, 20) +
                         whitеSpaces.substring(0, 22) + "M.Reg:" + whitеSpaces.substring(0, 4) + "%s%n",
                 String.valueOf(GameEngine.player1.armor.getItemManaReg()).substring(0, 3));
 
         System.out.printf("PICK YOUR PRIZE:%n");
-        System.out.printf("(1) %s  (2) %s  (3) %s  (4) %s   (0) No One%n", test[1].getItemName(), test[2].getItemName(),
-                test[3].getItemName(), test[4].getItemName());
+        System.out.printf("(1) %s  (2) %s  (3) %s  (4) %s   (0) No One%n", prizeItem[1].getItemName(), prizeItem[2].getItemName(),
+                prizeItem[3].getItemName(), prizeItem[4].getItemName());
     }
 
     private static void heroWinConsequence() throws InterruptedException {
         GameEngine.enemy.setMonsterHealth(0);
-        heroSpeed += GameEngine.player1.getHeroBaseAttackSpeed() + GameEngine.player1.getHeroWeaponAttackSpeed();
+        heroSpeed += GameEngine.player1.getHeroBaseAttackSpeed() + GameEngine.player1.getHeroWeaponAttackSpeed() +
+        GameEngine.player1.getHeroBootsAttackSpeed();
         System.out.printf("%n%n%n%n        The %s is fallen! " + "%n", GameEngine.enemy.getMonsterName());
         Thread.sleep(1500L);
         combatTurnOverview();
@@ -775,23 +792,30 @@ public class Fight<privte> {
         } else {
             int pickedPrizeItemPosition = Integer.parseInt(prizePick);
 
-            if (test[pickedPrizeItemPosition].getItemModel().equals("WEAPON")) {
-                if (test[pickedPrizeItemPosition] instanceof Weapon) {
-                    Weapon prizeItem = (Weapon) test[pickedPrizeItemPosition];
+            if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("WEAPON")) {
+                if (prizeItem[pickedPrizeItemPosition] instanceof Weapon) {
+                    Weapon prizeItem = (Weapon) Fight.prizeItem[pickedPrizeItemPosition];
                     GameEngine.player1.changeHeroWeapon(prizeItem);
                 }
-            } else if (test[pickedPrizeItemPosition].getItemModel().equals("ARMOR")) {
-                if (test[pickedPrizeItemPosition].getItemModel().equals("ARMOR")) {
-                    if (test[pickedPrizeItemPosition] instanceof Armor) {
-                        Armor prizeItem = (Armor) test[pickedPrizeItemPosition];
+            } else if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("ARMOR")) {
+                if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("ARMOR")) {
+                    if (prizeItem[pickedPrizeItemPosition] instanceof Armor) {
+                        Armor prizeItem = (Armor) Fight.prizeItem[pickedPrizeItemPosition];
                         GameEngine.player1.changeHeroArmor(GameEngine.player1.armor, prizeItem);
                     }
                 }
-            } else if (test[pickedPrizeItemPosition].getItemModel().equals("HELM")) {
-                if (test[pickedPrizeItemPosition].getItemModel().equals("HELM")) {
-                    if (test[pickedPrizeItemPosition] instanceof Helm) {
-                        Helm prizeItem = (Helm) test[pickedPrizeItemPosition];
+            } else if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("HELM")) {
+                if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("HELM")) {
+                    if (prizeItem[pickedPrizeItemPosition] instanceof Helm) {
+                        Helm prizeItem = (Helm) Fight.prizeItem[pickedPrizeItemPosition];
                         GameEngine.player1.changeHeroHelm(GameEngine.player1.helm, prizeItem);
+                    }
+                }
+            } else if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("BOOTS")) {
+                if (prizeItem[pickedPrizeItemPosition].getItemModel().equals("BOOTS")) {
+                    if (prizeItem[pickedPrizeItemPosition] instanceof Boots) {
+                        Boots prizeItem = (Boots) Fight.prizeItem[pickedPrizeItemPosition];
+                        GameEngine.player1.changeHeroBoots(GameEngine.player1.boots, prizeItem);
                     }
                 }
             }

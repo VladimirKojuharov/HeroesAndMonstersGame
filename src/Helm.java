@@ -88,7 +88,10 @@ public class Helm extends Item {
             if (GameEngine.playerGameProgress % 5 == 0) {
                 monsterLVLBonuses = 2;
             } else {
-                monsterLVLBonuses = (GameEngine.enemy.getMonsterLVL() - (1 + GameEngine.playerGameProgress / 5));
+                monsterLVLBonuses = GameEngine.enemy.getMonsterLVL() - GameEngine.player1.getHeroHelmLVL();
+                if (monsterLVLBonuses < 0) {
+                    monsterLVLBonuses = 0;
+                }
             }
         }
 
@@ -100,7 +103,7 @@ public class Helm extends Item {
             if (itemBonus.get(0).equals("Health")) {
                 this.itemHP += 1 + (getItemLVL() * 2) + (monsterLVLBonuses * getItemLVL());
             } else if (itemBonus.get(0).equals("Shield")) {
-                this.itemShield += (int) Math.ceil((getItemLVL() + monsterLVLBonuses) * 0.5);
+                this.itemShield += (int) Math.ceil((2 * getItemLVL() + monsterLVLBonuses) * 0.5);
             } else if (itemBonus.get(0).equals("S.Pwr")) {
                 this.itemSpellPower += getItemLVL() + monsterLVLBonuses;
             } else if (itemBonus.get(0).equals("Resist")) {

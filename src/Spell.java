@@ -221,9 +221,9 @@ public class Spell {
                 this.spellDMG = 1;
             }
         } else if (this.spellName.equals("STONE SKIN")) {
-            this.spellDMG = 2 + (int) (GameEngine.player1.getHeroSpellPower() * 0.2);
+            this.spellDMG = 2 + (int) (GameEngine.player1.getHeroSpellPower() * 0.15);
         } else if (this.spellName.equals("MANA BURN")) {
-            this.spellDMG = ((int) (1.25 * GameEngine.player1.getHeroLVL()) + GameEngine.player1.getHeroSpellPower() -
+            this.spellDMG = ((int) (GameEngine.player1.getHeroLVL()) + GameEngine.player1.getHeroSpellPower() -
                     GameEngine.enemy.getMonsterMagicResistance());
             if (this.spellDMG < 2) {
                 this.spellDMG = 2;
@@ -239,7 +239,7 @@ public class Spell {
         } else if (this.spellName.equals("SLOW")) {
             this.spellDMG = 0;
         } else if (this.spellName.equals("STUN STRIKE")) {
-            this.spellDMG = (int) (GameEngine.player1.getHeroLVL() * 1.5) + GameEngine.player1.getHeroSpellPower() -
+            this.spellDMG = GameEngine.player1.getHeroLVL() + GameEngine.player1.getHeroSpellPower() -
                     GameEngine.enemy.getMonsterMagicResistance();
             if (this.spellDMG < 1) {
                 this.spellDMG = 1;
@@ -247,7 +247,7 @@ public class Spell {
         } else if (this.spellName.equals("HASTE")) {
             this.spellDMG = 0;
         } else if (spellName.equals("LIFE DRAIN")) {
-            this.spellDMG = 1 + (int) (GameEngine.player1.getHeroLVL() * 1.25) + GameEngine.player1.getHeroSpellPower() -
+            this.spellDMG = GameEngine.player1.getHeroSpellPower() -
                     GameEngine.enemy.getMonsterMagicResistance();
             if (this.spellDMG < 1) {
                 this.spellDMG = 1;

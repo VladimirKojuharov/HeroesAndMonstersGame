@@ -69,7 +69,7 @@ public class Boots extends Item {
         this.itemHPReg = getItemLVL() * 0.3;
         this.itemEvasionChance = 0;
         this.itemManaReg = 0;
-        this.itemAttackSpeed = getItemLVL() * 0.01;
+        this.itemAttackSpeed = getItemLVL() * -0.02;
     }
 
     @Override
@@ -84,7 +84,10 @@ public class Boots extends Item {
             if (GameEngine.playerGameProgress % 5 == 0) {
                 monsterLVLBonuses = 2;
             } else {
-                monsterLVLBonuses = (GameEngine.enemy.getMonsterLVL() - (1 - GameEngine.playerGameProgress / 5));
+                monsterLVLBonuses = GameEngine.enemy.getMonsterLVL() - GameEngine.player1.getHeroHelmLVL();
+                if (monsterLVLBonuses < 0) {
+                    monsterLVLBonuses = 0;
+                }
             }
         }
         ArrayList<String> itemBonus = new ArrayList<>(Arrays.asList("HP.Reg", "M.Reg", "Evasion, AS", "HP.Reg", "M.Reg",
@@ -97,12 +100,12 @@ public class Boots extends Item {
 
             if (itemBonus.get(0).equals("HP.Reg")) {
                 this.itemHPReg += ((getItemLVL() * 0.2) + (monsterLVLBonuses * getItemLVL() * 0.1));
-            } else if (itemBonus.get(0).equals("M.Reg")) {
-                this.itemEvasionChance += (int) ((getItemLVL() + monsterLVLBonuses) * 0.25);
             } else if (itemBonus.get(0).equals("Evasion")) {
                 this.itemManaReg += (getItemLVL() + monsterLVLBonuses) * 0.5;
+            } else if (itemBonus.get(0).equals("M.Reg")) {
+                this.itemEvasionChance += (int) ((getItemLVL() + monsterLVLBonuses) * 0.25);
             } else if (itemBonus.get(0).equals("AS")) {
-                this.itemAttackSpeed += ((getItemLVL() + monsterLVLBonuses) * 0.01);
+                this.itemAttackSpeed += ((getItemLVL() + monsterLVLBonuses) * -0.02);
             }
         }
         itemBonus.remove(0);
@@ -117,7 +120,7 @@ public class Boots extends Item {
                 String.valueOf(getItemEvasionChance());
         this.itemStat3 = "M.Reg:" + whiteSpaces.substring(0, 6 - Double.toString(getItemManaReg()).length()) +
                 String.valueOf(getItemManaReg());
-        this.itemStat4 = String.format("AS:" + whiteSpaces.substring(0, 5) + "%.2f", getItemAttackSpeed());
+        this.itemStat4 = String.format("AS:" + whiteSpaces.substring(0, 4) + "%.2f", getItemAttackSpeed());
         this.itemStat5 = whiteSpaces.substring(0, 12);
         this.itemStat6 = whiteSpaces.substring(0, 12);
         this.itemStat7 = whiteSpaces.substring(0, 12);

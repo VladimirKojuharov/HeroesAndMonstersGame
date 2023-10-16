@@ -9,6 +9,7 @@ public class GameEngine {
     public static Monster enemy = new Monster();
     public Armor armor;
     public Helm helm;
+    public Boots boots;
     private String hero = " ";
     private Weapon club = new Weapon("Club");
     boolean gameOn = true;
@@ -32,11 +33,14 @@ public class GameEngine {
             this.armor = armor;
             Helm helm = new Helm();
             this.helm = helm;
+            Boots boots = new Boots();
+            this.boots = boots;
             this.setHero();
             Weapon basicWeapon = new Weapon("club");
             player1.changeHeroWeapon(basicWeapon);
             player1.equipHeroArmor(armor);
             player1.equipHeroHelm(helm);
+            player1.equipHeroBoots(boots);
             generateSpellsList();
             GameEngine.player1.learNewSpell();
             GameEngine.player1.learNewSpell();
@@ -67,11 +71,9 @@ public class GameEngine {
     }
 
     public void generateSpellsList() {
-        spellsList.clear();
+        this.spellsList.clear();
         for (int i = 0; i < spellsNameList.length; i++) {
-
             Spell spell = new Spell(spellsNameList[i]);
-
             this.spellsList.add(spell);
         }
     }
@@ -90,7 +92,7 @@ public class GameEngine {
             System.out.println();
             System.out.println("                        *1*               *2*                 *3*  ");
             System.out.println("                       MAGE             WARRIOR              ROGUE");
-            System.out.println("    Health:           70 (+5)          100 (+10)             90 (+7)");
+            System.out.println("    Health:           80 (+5)          100 (+10)             90 (+7)");
             System.out.println("    HP Reg:          0.6 (+0.6)          1 (+0.8)           0.7 (+0.7)");
             System.out.println("    Armor:             0 (+0.5)          1 (+1)               1 (+0.5)");
             System.out.println("    Shield:            5 (+1)            1 (+0)               1 (+0)");
@@ -98,7 +100,7 @@ public class GameEngine {
             System.out.println("    Attack Speed:    1.0 (-0.02)       1.0 (-0.02)          0.8 (-0.02)");
             System.out.println("    Crit. Chance:    0.5 (+0.5)        1.5 (+0.5)             3 (+1)");
             System.out.println("    Stun Chance:     0.5 (+0.5)          1 (+1)             0.5 (+0.5) ");
-            System.out.println("    Spell Ppower:      1 (+1)         0.33 (+0.33)          0.5 (+0.5)");
+            System.out.println("    Spell Ppower:      2 (+1)         0.33 (+0.33)          0.5 (+0.5)");
             System.out.println("    Magic Resist:      2 (+2)            1 (+1)               1 (+1)");
             System.out.println("    Mana:              1 (+0.25)         0 (+0)               0 (+0)");
             System.out.println("    M.Reg/Sec:       1.5 (+0.5)        1.2 (+0.2)           1.3 (+0.3)");
@@ -109,13 +111,13 @@ public class GameEngine {
         }
         Weapon weapon = new Weapon("Club");
         if (hero.equals("1")) {
-            player1 = new Hero(playerName, HeroType.MAGE, club, armor, helm);
+            player1 = new Hero(playerName, HeroType.MAGE, club, armor, helm, boots);
 
 
         } else if (hero.equals("2")) {
-            player1 = new Hero(playerName, HeroType.WARRIOR, club, armor, helm);
+            player1 = new Hero(playerName, HeroType.WARRIOR, club, armor, helm, boots);
         } else if (hero.equals("3")) {
-            player1 = new Hero(playerName, HeroType.ROGUE, club, armor, helm);
+            player1 = new Hero(playerName, HeroType.ROGUE, club, armor, helm, boots);
         }
         return player1;
     }

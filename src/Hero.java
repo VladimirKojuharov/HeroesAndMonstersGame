@@ -21,6 +21,10 @@ public class Hero {
     private String heroHelmSet;
     private String heroHelmName;
     private int heroHelmLVL = 1;
+    public Boots boots;
+    private String heroBootsSet;
+    private String heroBootsName;
+    private int heroBootsLVL = 1;
     private double heroBaseHealth;
     private int heroMaxHealth;
     private double heroBaseHealthReg;
@@ -55,7 +59,7 @@ public class Hero {
     private String whithSpaces = "                              ";
     private final static ArrayList<Spell> spellsForLearning = new ArrayList<>(3);
 
-    public Hero(String playerName, HeroType heroType, Weapon weapon, Armor armor, Helm helm) {
+    public Hero(String playerName, HeroType heroType, Weapon weapon, Armor armor, Helm helm, Boots boots) {
         this.setPlayerName(playerName);
         this.heroCurrentLVL = 1;
         this.heroType = heroType;
@@ -69,6 +73,9 @@ public class Hero {
         this.helm = helm;
         this.setHeroHelmName(this.helm);
         this.setHeroHelmLVL(this.helm);
+        this.boots = boots;
+        this.setHeroBootsName(this.boots);
+        this.setHeroBootsLVL(this.boots);
         this.setHeroBaseStats();
         this.setHeroMaxHealth();
         this.setHeroCurrentHealth(heroBaseHealth + this.armor.getItemHP() + this.helm.getItemHP());
@@ -80,7 +87,7 @@ public class Hero {
         this.changeHeroWeapon(weapon);
         this.setHeroMinDMG();
         this.setHeroMaxDMG(this.heroMaxDMG = getHeroBaseDamage() + getHeroWeaponMaxDMG());
-        this.setHeroAttackSpeed(getHeroBaseAttackSpeed() + getHeroWeaponAttackSpeed());
+        this.setHeroAttackSpeed(getHeroBaseAttackSpeed() + getHeroWeaponAttackSpeed() + getHeroBootsAttackSpeed());
         this.setHeroCritChance();
         this.setHeroStunChance();
         this.setHeroManaReg();
@@ -105,7 +112,7 @@ public class Hero {
                     "|%n", GameEngine.player1.playerName);
             System.out.println("|                                                                 |");
             System.out.printf("\\_________________________________________________________________/%n%n%n%n");
-            Thread.sleep(2000);
+            Thread.sleep(1500);
 
             this.heroCurrentXP = getHeroXP() - (GameEngine.player1.getHeroLVL() * 5);
             this.heroCurrentLVL++;
@@ -125,7 +132,7 @@ public class Hero {
             this.setHeroMinDMG();
             this.setHeroMaxDMG(this.heroMaxDMG = getHeroBaseDamage() + getHeroWeaponMaxDMG());
             this.setHeroCritChance();
-            this.setHeroAttackSpeed(getHeroBaseAttackSpeed() + getHeroWeaponAttackSpeed());
+            this.setHeroAttackSpeed(getHeroBaseAttackSpeed() + getHeroWeaponAttackSpeed() + getHeroBootsAttackSpeed());
             this.setHeroStunChance();
             this.setHeroSpellPower();
             this.setHeroMagicResistance();
@@ -166,7 +173,7 @@ public class Hero {
         spellsForLearning.clear();
         System.out.printf("%s learn the might %s magic.%n%n%n%n", GameEngine.playerName,
                 GameEngine.player1.heroSpellList.get(GameEngine.player1.getHeroSpellList().size() - 1).getSpellName());
-        Thread.sleep(2000L);
+        Thread.sleep(1000L);
     }
 
     private void printSpellsForLearningWhenHeroLvlUPList() {
@@ -225,7 +232,9 @@ public class Hero {
     public int getHeroHelmLVL() {
         return this.heroHelmLVL;
     }
-
+    public int getHeroBootsLVL() {
+        return this.heroBootsLVL;
+    }
     public double getHeroBaseHealth() {
         return this.heroBaseHealth;
     }
@@ -308,16 +317,24 @@ public class Hero {
         return this.heroHelmName;
     }
 
+    public String getHeroBootsName() {
+        return this.heroBootsName;
+    }
+
     public int getHeroWeaponMinDMG() {
-        return this.weapon.getItemMinDMG();
+        return this.weapon.getWeaponMinDMG();
     }
 
     public int getHeroWeaponMaxDMG() {
-        return this.weapon.getItemMaxDMG();
+        return this.weapon.getWeaponMaxDMG();
     }
 
     public double getHeroWeaponAttackSpeed() {
         return this.weapon.getItemAttackSpeed();
+    }
+
+    public double getHeroBootsAttackSpeed() {
+        return this.boots.getItemAttackSpeed();
     }
 
     public int getHeroXP() {
@@ -417,6 +434,11 @@ public class Hero {
         return heroHelmName;
     }
 
+    private String setHeroBootsName(Boots boots) {
+        this.heroBootsName = boots.getItemName();
+        return heroBootsName;
+    }
+
     private int setHeroArmorLVL(Armor armor) {
         this.heroArmorLVL = armor.getItemLVL();
         return heroArmorLVL;
@@ -425,6 +447,24 @@ public class Hero {
     private int setHeroHelmLVL(Helm helm) {
         this.heroHelmLVL = helm.getItemLVL();
         return heroHelmLVL;
+    }
+
+    private int setHeroBootsLVL(Boots boots) {
+        this.heroBootsLVL = boots.getItemLVL();
+        return heroBootsLVL;
+    }
+
+    public void equipHeroWeapon(Weapon weapon){
+        this.weapon = weapon;
+        this.heroWeaponSet = weapon.getItemSet();
+        this.setHeroWeaponName(this.weapon);
+        this.heroWeaponLVL = weapon.getItemLVL();
+        this.heroMinDMG = getHeroBaseDamage() + getHeroWeaponMinDMG();
+        this.heroMaxDMG = getHeroBaseDamage() + getHeroWeaponMaxDMG();
+        this.heroAttackSpeed = getHeroBaseAttackSpeed() + weapon.getItemAttackSpeed() + boots.getItemAttackSpeed();
+        this.heroCritChance = getHeroBaseCritChance() + weapon.getItemCriticalChance();
+        this.heroStunChance = getHeroBaseStunChance() + weapon.getItemStunChance();
+        this.heroSpellPower = getHeroBaseSpellPower() + weapon.getWeaponSpellPower() + armor.getItemSpellPower();
     }
 
     public void changeHeroWeapon(Weapon weapon) {
@@ -440,10 +480,10 @@ public class Hero {
         this.heroWeaponLVL = weapon.itemLVL;
         this.heroMinDMG = getHeroBaseDamage() + getHeroWeaponMinDMG();
         this.heroMaxDMG = getHeroBaseDamage() + getHeroWeaponMaxDMG();
-        this.heroAttackSpeed = getHeroBaseAttackSpeed() + getHeroWeaponAttackSpeed();
+        this.heroAttackSpeed = getHeroBaseAttackSpeed() + weapon.getItemAttackSpeed() + boots.getItemAttackSpeed();
         this.heroCritChance = getHeroBaseCritChance() + weapon.getItemCriticalChance();
         this.heroStunChance = getHeroBaseStunChance() + weapon.getItemStunChance();
-        this.heroSpellPower = getHeroBaseSpellPower() + weapon.getItemSpellPower() + armor.getItemSpellPower();
+        this.heroSpellPower = getHeroBaseSpellPower() + weapon.getWeaponSpellPower() + armor.getItemSpellPower();
     }
 
     public void equipHeroArmor(Armor armor) {
@@ -452,12 +492,12 @@ public class Hero {
         this.setHeroArmorName(this.armor);
         this.heroArmorLVL = armor.getItemLVL();
         this.heroMaxHealth = (int) (getHeroBaseHealth() + armor.getItemHP());
-        this.heroHealthReg = getHeroBaseHealthReg() + armor.getItemHPReg();
+        this.heroHealthReg = getHeroBaseHealthReg() + armor.getItemHPReg() + boots.getItemHPReg();
         this.currentHeroArmor = getHeroBaseArmor() + armor.getItemArmor();
         this.heroShield = getHeroShield() + armor.getItemShield();
-        this.heroEvasionChance = getHeroBaseEvasionChance() + armor.getItemEvasionChance();
-        this.currentHeroMana = getHeroBaseMana(); // + armor.getItemMana();
-        this.heroManaReg = getHeroBaseManaReg() + armor.getItemManaReg();
+        this.heroEvasionChance = getHeroBaseEvasionChance() + armor.getItemEvasionChance() + boots.getItemEvasionChance();
+        this.currentHeroMana = getHeroBaseMana();
+        this.heroManaReg = getHeroBaseManaReg() + armor.getItemManaReg() + boots.getItemManaReg();
         this.heroSpellPower = getHeroBaseSpellPower() + armor.getItemSpellPower();
         this.heroMagicResistance = getHeroBaseMagicResistance() + armor.getItemMagicResistance();
     }
@@ -471,6 +511,17 @@ public class Hero {
         this.heroShield = getHeroBaseShield() + armor.getItemShield() + helm.getItemShield();
         this.heroSpellPower = getHeroBaseSpellPower() + armor.getItemSpellPower() + helm.getItemSpellPower();
         this.heroMagicResistance = getHeroBaseMagicResistance() + armor.getItemMagicResistance() + helm.getItemMagicResistance();
+    }
+
+    public  void equipHeroBoots(Boots boots) {
+        this.boots = boots;
+        this.heroBootsSet = boots.getItemSet();
+        this.setHeroBootsName(this.boots);
+        this.heroBootsLVL = boots.getItemLVL();
+        this.heroHealthReg = getHeroBaseHealthReg() + armor.getItemHPReg() + boots.getItemHPReg();
+        this.heroManaReg = getHeroBaseManaReg() + armor.getItemManaReg() + boots.getItemManaReg();
+        this.heroAttackSpeed = getHeroBaseAttackSpeed() + weapon.getItemAttackSpeed() + boots.getItemAttackSpeed();
+        this.heroEvasionChance = getHeroBaseEvasionChance() + armor.getItemEvasionChance() + boots.getItemEvasionChance();
     }
 
     public void changeHeroArmor(Armor oldArmor, Armor armor) {
@@ -498,7 +549,7 @@ public class Hero {
     }
 
     public void changeHeroHelm(Helm oldHelm, Helm newHelm) {
-        this.heroHelmSet = helm.getItemSet();
+        this.heroHelmSet = newHelm.getItemSet();
         this.heroMaxHealth = getHeroMaxHealth() - oldHelm.getItemHP() + newHelm.getItemHP();
         if (this.currentHeroHealth > this.heroMaxHealth) {
             this.currentHeroHealth = this.heroMaxHealth;
@@ -515,6 +566,15 @@ public class Hero {
         this.helm = newHelm;
         this.setHeroHelmName(this.helm);
         this.heroHelmLVL = newHelm.getItemLVL();
+    }
+
+    public void changeHeroBoots (Boots oldBoots, Boots newBoots) {
+        this.heroBootsSet = newBoots.getItemSet();
+        this.heroBootsName = newBoots.getItemName();
+        this.heroHealthReg = this.heroHealthReg - oldBoots.getItemHPReg() + newBoots.getItemHPReg();
+        this.heroManaReg = this.heroManaReg - oldBoots.getItemManaReg() + newBoots.getItemManaReg();
+        this.heroAttackSpeed = getHeroBaseAttackSpeed() + weapon.getItemAttackSpeed() + newBoots.getItemAttackSpeed();
+        this.heroEvasionChance = this.heroEvasionChance - oldBoots.getItemEvasionChance() + newBoots.getItemEvasionChance();
     }
 
     private void setHeroBaseStats() {
@@ -534,7 +594,7 @@ public class Hero {
             this.heroBaseManaReg = 1 + getHeroLVL() * 0.2;
 
         } else if (this.heroType.equals(HeroType.MAGE)) {
-            this.heroBaseHealth = 65 + (5 * getHeroLVL());
+            this.heroBaseHealth = 75 + (5 * getHeroLVL());
             this.heroBaseHealthReg = getHeroLVL() * 0.6;
             this.heroBaseArmor = (int) (getHeroLVL() * 0.5);
             this.heroBaseShield = 4 + getHeroLVL();
@@ -543,7 +603,7 @@ public class Hero {
             this.heroBaseAttackSpeed = 1.02 - 0.02 * getHeroLVL();
             this.heroBaseCritChance = (int) (getHeroLVL() * 0.5);
             this.heroBaseStunChance = (int) (getHeroLVL() * 0.5);
-            this.heroBaseSpellPower = 1 + getHeroLVL();
+            this.heroBaseSpellPower = 2 + getHeroLVL();
             this.heroBaseMagicResistance = getHeroLVL() * 2;
             this.heroBaseMana = 1 + (int) (getHeroLVL() * 0.25);
             this.heroBaseManaReg = 1 + (getHeroLVL() * 0.5);
@@ -582,7 +642,7 @@ public class Hero {
     }
 
     public void setHeroHealthReg() {
-        this.heroHealthReg = getHeroBaseHealthReg() + this.armor.getItemHPReg();
+        this.heroHealthReg = getHeroBaseHealthReg() + this.armor.getItemHPReg() + this.boots.getItemHPReg();
     }
 
     public void setCurrentHeroArmor() {
@@ -594,7 +654,7 @@ public class Hero {
     }
 
     public void setHeroEvasionChance() {
-        this.heroEvasionChance = getHeroBaseEvasionChance() + this.armor.getItemEvasionChance();
+        this.heroEvasionChance = getHeroBaseEvasionChance() + this.armor.getItemEvasionChance() + this.boots.getItemEvasionChance();
     }
 
     public void setHeroMinDMG() {
@@ -622,11 +682,11 @@ public class Hero {
     }
 
     public void setHeroManaReg() {
-        this.heroManaReg = getHeroBaseManaReg() + this.armor.getItemManaReg();
+        this.heroManaReg = getHeroBaseManaReg() + this.armor.getItemManaReg() + this.boots.getItemManaReg();
     }
 
     public void setHeroSpellPower() {
-        this.heroSpellPower = getHeroBaseSpellPower() + this.weapon.getItemSpellPower() + this.armor.getItemSpellPower() +
+        this.heroSpellPower = getHeroBaseSpellPower() + this.weapon.getWeaponSpellPower() + this.armor.getItemSpellPower() +
                 this.helm.getItemSpellPower();
     }
 

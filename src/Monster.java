@@ -20,9 +20,9 @@ public class Monster {
     public int monsterEvasionChance;
     public static boolean CursingCast = false;
     public static boolean skeletonArmorIncreasment = false;
-    public static int hydraLifeTracker = 250;
+    public static int hydraLifeTracker = 600;
     public static boolean lichKingPoisonActivation = false;
-
+    public static int lichKingTotalPoisonDMG = 0;
 
     String[] monsterNames = {"Troll       ", "Ogre        ", "Cyclops     ", "Lich        ", "Vampire     ",
             "Skeleton    ", "Werewolf    ", "Witch       ", "Zombie      ", "Harpy       ", "Medusa      ",
@@ -35,7 +35,7 @@ public class Monster {
     public Monster() {
         if (GameEngine.playerGameProgress == 40) {
             this.createBossType();
-        } else if (GameEngine.playerGameProgress % 5 != 0) {
+        } else if (GameEngine.playerGameProgress % 5 != 0 && GameEngine.playerGameProgress < 35) {
             this.createMonsterType();
         } else {
             this.createChampionMonsterType();
@@ -278,7 +278,7 @@ public class Monster {
             this.monsterCritChance = 2 * this.monsterLVL;
             this.monsterStunChance = this.monsterLVL;
             this.monsterSpellPower = 0;
-            this.monsterMagicResistance = this.monsterLVL * 2;
+            this.monsterMagicResistance = this.monsterLVL * 3;
             this.monsterMana = 0;
             this.monsterManaReg = 0;
 
@@ -291,7 +291,7 @@ public class Monster {
             this.monsterSpeed = 1.6 - attackSpeedCorrector;
             this.monsterCritChance = this.monsterLVL;
             this.monsterStunChance = (int) (this.monsterLVL * 0.5);
-            this.monsterSpellPower = 3 + (this.monsterLVL * 2);
+            this.monsterSpellPower = 1 + (this.monsterLVL * 3) + rand.nextInt(this.monsterLVL);
             this.monsterMagicResistance = this.monsterLVL * 2;
             this.monsterMana = 0;
             this.monsterManaReg = 1 + this.monsterLVL;
@@ -305,10 +305,10 @@ public class Monster {
             this.monsterSpeed = 2 - attackSpeedCorrector;
             this.monsterCritChance = this.monsterLVL;
             this.monsterStunChance = (int) (this.monsterLVL * 1.5);
-            this.monsterSpellPower = 1 + this.monsterLVL + rand.nextInt(this.monsterLVL);
-            this.monsterMagicResistance = this.monsterLVL + rand.nextInt(this.monsterLVL);
-            this.monsterMana = 0;
-            this.monsterManaReg = 1.1 * this.monsterLVL;
+            this.monsterSpellPower = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
+            this.monsterMagicResistance = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
+            this.monsterMana = 1;
+            this.monsterManaReg = 0.85 * this.monsterLVL;
 
         } else if (monsterName.trim().equals("Harpy")) {
             this.monsterHealth = 10 + this.monsterLVL * 12 + (rand.nextInt(this.monsterLVL * 2));
@@ -319,24 +319,24 @@ public class Monster {
             this.monsterSpeed = 1.5 - attackSpeedCorrector;
             this.monsterCritChance = this.monsterLVL * 4;
             this.monsterStunChance = (int) (this.monsterLVL * 0.5);
-            this.monsterSpellPower = this.monsterLVL * 2;
+            this.monsterSpellPower = 1 + this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
             this.monsterMagicResistance = this.monsterLVL * 3;
-            this.monsterMana = 0;
-            this.monsterManaReg = 1 * this.monsterLVL;
+            this.monsterMana = 1;
+            this.monsterManaReg = 0.9 * this.monsterLVL;
 
         } else if (monsterName.trim().equals("Medusa")) {
             this.monsterHealth = 8 + this.monsterLVL * 17 + (rand.nextInt(this.monsterLVL * 2));
-            this.monsterDamage = 5 + this.monsterLVL * 3;
+            this.monsterDamage = 4 + this.monsterLVL * 4;
             this.monsterHealthReg = 0;
             this.monsterArmor = 1 + this.monsterLVL;
             this.monsterEvasionChance = 1 + this.monsterLVL * 2;
             this.monsterSpeed = 1.4 - attackSpeedCorrector / 2;
             this.monsterCritChance = this.monsterLVL * 2;
             this.monsterStunChance = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
-            this.monsterSpellPower = 1 + this.monsterLVL * 2;
+            this.monsterSpellPower = 1 + this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
             this.monsterMagicResistance = this.monsterLVL * 3;
-            this.monsterMana = 0;
-            this.monsterManaReg = 1.1 * this.monsterLVL;
+            this.monsterMana = 1;
+            this.monsterManaReg = 0.9 * this.monsterLVL;
 
         } else if (monsterName.trim().equals("Minotaur")) {
             this.monsterHealth = 10 + this.monsterLVL * 18 + rand.nextInt(this.monsterLVL);
@@ -347,10 +347,10 @@ public class Monster {
             this.monsterSpeed = 1.6 - attackSpeedCorrector;
             this.monsterCritChance = this.monsterLVL * 2;
             this.monsterStunChance = this.monsterLVL + rand.nextInt(this.monsterLVL);
-            this.monsterSpellPower = this.monsterLVL * 2;
+            this.monsterSpellPower = this.monsterLVL * 2 + rand.nextInt(2);
             this.monsterMagicResistance = 1 + this.monsterLVL;
-            this.monsterMana = 0;
-            this.monsterManaReg = 1 * this.monsterLVL;
+            this.monsterMana = 1;
+            this.monsterManaReg = 0.8 * this.monsterLVL;
 
         } else if (monsterName.trim().equals("Goblin")) {
             this.monsterHealth = 5 + this.monsterLVL * 16 + (rand.nextInt(this.monsterLVL * 2));
@@ -361,10 +361,10 @@ public class Monster {
             this.monsterSpeed = 1.5 - attackSpeedCorrector / 1.6;
             this.monsterCritChance = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
             this.monsterStunChance = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
-            this.monsterSpellPower = this.monsterLVL + rand.nextInt(this.monsterLVL);
+            this.monsterSpellPower = this.monsterLVL * 2 + rand.nextInt(this.monsterLVL);
             this.monsterMagicResistance = this.monsterLVL * 3;
-            this.monsterMana = 0;
-            this.monsterManaReg = this.monsterLVL;
+            this.monsterMana = 1;
+            this.monsterManaReg = 0.8 * this.monsterLVL;
 
         } else if (monsterName.trim().equals("Ork")) {
             this.monsterHealth = 13 + this.monsterLVL * 16 + (rand.nextInt(this.monsterLVL * 2));
@@ -375,7 +375,7 @@ public class Monster {
             this.monsterSpeed = 1.5 - attackSpeedCorrector / 2;
             this.monsterCritChance = this.monsterLVL * 2;
             this.monsterStunChance = this.monsterLVL * 2;
-            this.monsterSpellPower = 1 + this.monsterLVL;
+            this.monsterSpellPower = 1 + this.monsterLVL * 2;
             this.monsterMagicResistance = this.monsterLVL * 2;
             this.monsterMana = 1;
             this.monsterManaReg = 0.7 * this.monsterLVL;
@@ -397,7 +397,7 @@ public class Monster {
             this.monsterStunChance = (int) (this.monsterLVL * 1.6);
             this.monsterMana = 0;
             this.monsterManaReg = 2.5 + 0.1 * this.monsterLVL + rand.nextInt(this.monsterLVL) * 0.1;
-            this.monsterSpellPower = 1 + (this.monsterLVL * 3);
+            this.monsterSpellPower = 1 + (this.monsterLVL * 4);
             this.monsterMagicResistance = 1 + (this.monsterLVL * 3);
 
         } else if (championMonsterStats.trim().equals("Infernal")) {
@@ -434,26 +434,26 @@ public class Monster {
             this.monsterArmor = this.monsterLVL * 2;
             this.monsterEvasionChance = 3 + this.monsterLVL;
             this.monsterDamage = 6 + this.monsterLVL * 10;
-            this.monsterSpeed = 2.7 - 0.15 * monsterLVL;
+            this.monsterSpeed = 2.5 - 0.15 * monsterLVL;
             this.monsterCritChance = 2 + this.monsterLVL;
             this.monsterStunChance = 3 + this.monsterLVL;
             this.monsterMana = 0;
             this.monsterManaReg = 2 + 0.3 * this.monsterLVL;
-            this.monsterSpellPower = this.monsterLVL;
-            this.monsterMagicResistance = this.monsterLVL;
+            this.monsterSpellPower = this.monsterLVL * 2 + rand.nextInt(monsterLVL + 1);
+            this.monsterMagicResistance = (int) (this.monsterLVL * 1.5);
 
         } else if (championMonsterStats.trim().equals("Оblivion")) {
             this.monsterHealth = 12 + this.monsterLVL * 33 + (2 * (rand.nextInt(monsterLVL + 1)));
             this.monsterHealthReg = 0;
             this.monsterArmor = this.monsterLVL * 3;
             this.monsterEvasionChance = 6 + this.monsterLVL * 2;
-            this.monsterDamage = 10 + this.monsterLVL * 5;
+            this.monsterDamage = 9 + this.monsterLVL * 6;
             this.monsterSpeed = 2 - 0.1 * this.monsterLVL;
             this.monsterCritChance = 1 + (int) (this.monsterLVL * 1.5);
             this.monsterStunChance = (int) (this.monsterLVL * 0.5);
             this.monsterMana = 3;
             this.monsterManaReg = 2 + 0.3 * this.monsterLVL;
-            this.monsterSpellPower = this.monsterLVL * 3;
+            this.monsterSpellPower = this.monsterLVL * 3 + rand.nextInt(monsterLVL + 1);
             this.monsterMagicResistance = this.monsterLVL * 3;
 
         } else if (championMonsterStats.trim().equals("Terror")) {
@@ -461,21 +461,21 @@ public class Monster {
             this.monsterHealthReg = 0;
             this.monsterArmor = this.monsterLVL * 2;
             this.monsterEvasionChance = 1 + this.monsterLVL * 2;
-            this.monsterDamage = 10 + this.monsterLVL * 7;
-            this.monsterSpeed = 2.8 - 0.1 * this.monsterLVL;
+            this.monsterDamage = 9 + this.monsterLVL * 8;
+            this.monsterSpeed = 2.5 - 0.15 * this.monsterLVL;
             this.monsterCritChance = 1 + (int) (this.monsterLVL * 1.5);
             this.monsterStunChance = this.monsterLVL;
             this.monsterMana = 0;
             this.monsterManaReg = 3;
-            this.monsterSpellPower = this.monsterLVL * 3;
+            this.monsterSpellPower = this.monsterLVL * 3 + rand.nextInt(monsterLVL + 1);
             this.monsterMagicResistance = this.monsterLVL * 2;
 
         } else if (championMonsterStats.trim().equals("Demon Lord")) {
-            this.monsterHealth = 15 + this.monsterLVL * 25 + (2 * (rand.nextInt(monsterLVL + 1)));
+            this.monsterHealth = 13 + this.monsterLVL * 27 + (2 * (rand.nextInt(monsterLVL + 1)));
             this.monsterHealthReg = 4 + this.monsterLVL;
-            this.monsterArmor = this.monsterLVL;
+            this.monsterArmor = (int) (this.monsterLVL * 1.5);
             this.monsterEvasionChance = 1 + (int) (this.monsterLVL * 2.5);
-            this.monsterDamage = 10 + this.monsterLVL * 5;
+            this.monsterDamage = 8 + this.monsterLVL * 7 + rand.nextInt(monsterLVL);
             this.monsterSpeed = 1.9 - 0.05 * this.monsterLVL;
             this.monsterCritChance = 1 + (int) (this.monsterLVL * 2);
             this.monsterStunChance = this.monsterLVL;
@@ -488,21 +488,21 @@ public class Monster {
             this.monsterHealth = 20 + this.monsterLVL * 20 + (2 * (rand.nextInt(monsterLVL + 1)));
             this.monsterHealthReg = 0;
             this.monsterArmor = this.monsterLVL * 4;
-            this.monsterEvasionChance = this.monsterLVL;
-            this.monsterDamage = 9 + this.monsterLVL * 4;
-            this.monsterSpeed = 2.05 - 0.05 * monsterLVL;
-            this.monsterCritChance = 1 + (int) (this.monsterLVL * 2);
+            this.monsterEvasionChance = (int) (this.monsterLVL * 1.5);
+            this.monsterDamage = 9 + this.monsterLVL * 6;
+            this.monsterSpeed = 2.075 - 0.075 * monsterLVL;
+            this.monsterCritChance = 1 + (this.monsterLVL * 2);
             this.monsterStunChance = this.monsterLVL;
             this.monsterMana = 0;
             this.monsterManaReg = 3;
-            this.monsterSpellPower = this.monsterLVL * 3;
+            this.monsterSpellPower = this.monsterLVL * 3 + rand.nextInt(monsterLVL + 1);
             this.monsterMagicResistance = this.monsterLVL * 4;
         }
     }
 
     public void setBossMonsterStats(String bossType) {
         if (bossType.trim().equals("Hydra")) {
-            this.monsterHealth = 500;
+            this.monsterHealth = 800;
             this.monsterHealthReg = 15;
             this.monsterArmor = 30;
             this.monsterEvasionChance = 5;
@@ -513,7 +513,7 @@ public class Monster {
             this.monsterMana = 0;
             this.monsterManaReg = 0;
             this.monsterSpellPower = 15;
-            this.monsterMagicResistance = 30;
+            this.monsterMagicResistance = 25;
 
         } else if (bossType.trim().equals("Fenix")) {
             this.monsterHealth = 450;
@@ -526,35 +526,35 @@ public class Monster {
             this.monsterStunChance = 5;
             this.monsterMana = 0;
             this.monsterManaReg = 13;
-            this.monsterSpellPower = 50;
+            this.monsterSpellPower = 40;
             this.monsterMagicResistance = 40;
 
         } else if (bossType.trim().equals("Titan")) {
-            this.monsterHealth = 600;
+            this.monsterHealth = 700;
             this.monsterHealthReg = 0;
             this.monsterArmor = 20;
-            this.monsterEvasionChance = 20;
+            this.monsterEvasionChance = 25;
             this.monsterDamage = 65;
-            this.monsterSpeed = 1.7;
+            this.monsterSpeed = 1.6;
             this.monsterCritChance = 10;
             this.monsterStunChance = 20;
             this.monsterMana = 5;
             this.monsterManaReg = 8;
-            this.monsterSpellPower = 45;
+            this.monsterSpellPower = 30;
             this.monsterMagicResistance = 30;
 
         } else if (bossType.trim().equals("Black Dragon")) {
-            this.monsterHealth = 550;
-            this.monsterHealthReg = 15;
-            this.monsterArmor = 20;
+            this.monsterHealth = 600;
+            this.monsterHealthReg = 20;
+            this.monsterArmor = 25;
             this.monsterEvasionChance = 20;
             this.monsterDamage = 70;
-            this.monsterSpeed = 2;
+            this.monsterSpeed = 1.7;
             this.monsterCritChance = 15;
             this.monsterStunChance = 15;
             this.monsterMana = 5;
             this.monsterManaReg = 8;
-            this.monsterSpellPower = 50;
+            this.monsterSpellPower = 40;
             this.monsterMagicResistance = 35;
 
         } else if (bossType.trim().equals("Behemoth")) {
@@ -563,13 +563,13 @@ public class Monster {
             this.monsterArmor = 20;
             this.monsterEvasionChance = 20;
             this.monsterDamage = 50;
-            this.monsterSpeed = 1.6;
-            this.monsterCritChance = 25;
-            this.monsterStunChance = 20;
+            this.monsterSpeed = 1.5;
+            this.monsterCritChance = 35;
+            this.monsterStunChance = 15;
             this.monsterMana = 0;
             this.monsterManaReg = 7;
             this.monsterSpellPower = 0;
-            this.monsterMagicResistance = 20;
+            this.monsterMagicResistance = 30;
         }
     }
 
@@ -607,8 +607,8 @@ public class Monster {
                 GameEngine.player1.setHeroStunStatus(true);
                 int cyclopsRockTrowDMG = 3 + GameEngine.enemy.getMonsterLVL() + GameEngine.enemy.getMonsterSpellPower() -
                         GameEngine.player1.getHeroMagicResistance();
-                if (cyclopsRockTrowDMG < 1) {
-                    cyclopsRockTrowDMG = 1;
+                if (cyclopsRockTrowDMG < GameEngine.enemy.getMonsterLVL()) {
+                    cyclopsRockTrowDMG = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("Cyclops trow giant rock at the hero dealing %d DMG and stunning him.%n", cyclopsRockTrowDMG);
                 Thread.sleep(1000L);
@@ -620,8 +620,8 @@ public class Monster {
             if (GameEngine.enemy.getMonsterMana() >= 3) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 3);
                 int lichSorrowRippleDMG = (2 * GameEngine.enemy.getMonsterSpellPower()) - GameEngine.player1.getHeroMagicResistance();
-                if (lichSorrowRippleDMG < 1) {
-                    lichSorrowRippleDMG = 1;
+                if (lichSorrowRippleDMG < GameEngine.enemy.getMonsterLVL()) {
+                    lichSorrowRippleDMG = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Lich cast SORROW RIPPLE dealing %d DMG to %s.%n", lichSorrowRippleDMG, GameEngine.playerName);
                 Thread.sleep(1000L);
@@ -655,8 +655,8 @@ public class Monster {
             int witchSpiritExtraxtDMG = GameEngine.enemy.getMonsterLVL() + GameEngine.enemy.getMonsterSpellPower() -
                     GameEngine.player1.getHeroMagicResistance();
             Thread.sleep(1000L);
-            if (witchSpiritExtraxtDMG < 1) {
-                witchSpiritExtraxtDMG = 1;
+            if (witchSpiritExtraxtDMG < GameEngine.enemy.getMonsterLVL()) {
+                witchSpiritExtraxtDMG = GameEngine.enemy.getMonsterLVL();
             }
             if (GameEngine.enemy.getMonsterMana() >= 3 + (int) (GameEngine.enemy.getMonsterLVL() * 0.5)) {
                 System.out.printf("🕮 Witch cast SPIRIT EXTRACT to %s dealing %d damage.%n", GameEngine.playerName, witchSpiritExtraxtDMG);
@@ -675,9 +675,9 @@ public class Monster {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.monsterLVL));
 
-                int zombiePlague = GameEngine.enemy.getMonsterSpellPower() * 2 - (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
-                if (zombiePlague < 1) {
-                    zombiePlague = 1;
+                int zombiePlague = GameEngine.enemy.getMonsterSpellPower() - (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
+                if (zombiePlague < GameEngine.enemy.getMonsterLVL()) {
+                    zombiePlague = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Zombie cast Plague deal %d damage to %s.%n", zombiePlague, GameEngine.playerName);
                 Thread.sleep(1000L);
@@ -687,10 +687,10 @@ public class Monster {
         } else if (monsterType.equals("Harpy")) {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.getMonsterLVL()));
-                int nailsStrike = (int) (1 + GameEngine.enemy.getMonsterSpellPower() * 2 * GameEngine.enemy.getMonsterCritChance() * 0.1) -
+                int nailsStrike = (int) (1 + GameEngine.enemy.getMonsterSpellPower() * 2.15) -
                         (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
-                if (nailsStrike < 1) {
-                    nailsStrike = 1;
+                if (nailsStrike < GameEngine.enemy.getMonsterLVL()) {
+                    nailsStrike = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Harpy attack %s with Nails Strike, deal him %d damage.%n", GameEngine.playerName, nailsStrike);
                 Thread.sleep(1000L);
@@ -701,8 +701,8 @@ public class Monster {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.getMonsterLVL()));
                 int snakesStrike = 2 + GameEngine.enemy.getMonsterSpellPower() - (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
-                if (snakesStrike < 1) {
-                    snakesStrike = 1;
+                if (snakesStrike < GameEngine.enemy.getMonsterLVL()) {
+                    snakesStrike = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Medusa make Snakes Strike attack and deal %d damage to %s and gain %d Health.%n",
                         snakesStrike, GameEngine.playerName, snakesStrike);
@@ -714,10 +714,9 @@ public class Monster {
         } else if (monsterType.equals("Minotaur")) {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.getMonsterLVL()));
-                int slashAttack = GameEngine.enemy.getMonsterDamage() / 2 + GameEngine.enemy.getMonsterSpellPower() -
-                        GameEngine.player1.getHeroMagicResistance();
-                if (slashAttack < 1) {
-                    slashAttack = 1;
+                int slashAttack = GameEngine.enemy.getMonsterSpellPower() * 3 - GameEngine.player1.getHeroMagicResistance();
+                if (slashAttack < GameEngine.enemy.getMonsterLVL()) {
+                    slashAttack = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Minotaur make Slash Attack and deal %d damage to %s and gain %d Health.%n",
                         slashAttack, GameEngine.playerName, slashAttack);
@@ -728,9 +727,9 @@ public class Monster {
         } else if (monsterType.equals("Goblin")) {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.getMonsterLVL()));
-                int trowingSpear = GameEngine.enemy.getMonsterSpellPower() * 2 - (GameEngine.player1.getHeroMagicResistance());
-                if (trowingSpear < 1) {
-                    trowingSpear = 1;
+                int trowingSpear = GameEngine.enemy.getMonsterSpellPower() * 2 - GameEngine.player1.getHeroMagicResistance();
+                if (trowingSpear < GameEngine.enemy.getMonsterLVL()) {
+                    trowingSpear = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Goblin trow a Spire dealing %d damage to %s.%n",
                         trowingSpear, GameEngine.playerName);
@@ -742,8 +741,8 @@ public class Monster {
             if (GameEngine.enemy.getMonsterMana() >= 1 + GameEngine.enemy.getMonsterLVL()) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - (1 + GameEngine.enemy.getMonsterLVL()));
                 int orkVoodoo = GameEngine.enemy.getMonsterSpellPower() * 2 - (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
-                if (orkVoodoo < 1) {
-                    orkVoodoo = 1;
+                if (orkVoodoo < GameEngine.enemy.getMonsterLVL()) {
+                    orkVoodoo = GameEngine.enemy.getMonsterLVL();
                 }
                 int orkLifeRestore = GameEngine.enemy.getMonsterLVL() * 2;
                 System.out.printf("🕮 Ork cast Voodoo and restore %d Health, gain 2 Armor and deal %d damage to %s.%n",
@@ -756,8 +755,8 @@ public class Monster {
 
         } else if (monsterType.equals("Оblivion")) {
             int oblivionManaBurnDMG = 2 + GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance();
-            if (oblivionManaBurnDMG < 1) {
-                oblivionManaBurnDMG = 1;
+            if (oblivionManaBurnDMG < GameEngine.enemy.getMonsterLVL()) {
+                oblivionManaBurnDMG = GameEngine.enemy.getMonsterLVL();
             }
             int oblivionManaBurning = 2 + GameEngine.enemy.getMonsterLVL();
             if (GameEngine.enemy.getMonsterMana() >= 2 + GameEngine.enemy.getMonsterLVL()) {
@@ -773,8 +772,8 @@ public class Monster {
             }
         } else if (monsterType.equals("Infernal")) {
             int infernalBurningDMG = 2 + GameEngine.enemy.getMonsterLVL() * 3 - (int) (GameEngine.player1.getHeroMagicResistance() * 0.5);
-            if (infernalBurningDMG < 1) {
-                infernalBurningDMG = 1;
+            if (infernalBurningDMG < GameEngine.enemy.getMonsterLVL()) {
+                infernalBurningDMG = GameEngine.enemy.getMonsterLVL();
             }
             System.out.printf("Infernal burn %s deal him %d damage.%n", GameEngine.playerName, infernalBurningDMG);
             Thread.sleep(1000L);
@@ -783,8 +782,8 @@ public class Monster {
         } else if (monsterType.equals("Abomination")) {
             int abominationLifeDrainDMG = 3 + GameEngine.enemy.getMonsterLVL() + GameEngine.enemy.getMonsterSpellPower() -
                     GameEngine.player1.getHeroMagicResistance();
-            if (abominationLifeDrainDMG < 1) {
-                abominationLifeDrainDMG = 1;
+            if (abominationLifeDrainDMG < GameEngine.enemy.getMonsterLVL()) {
+                abominationLifeDrainDMG = GameEngine.enemy.getMonsterLVL();
             }
             if (GameEngine.enemy.getMonsterMana() >= 2 + GameEngine.enemy.getMonsterLVL()) {
                 int abominationHealthInTheBegining = GameEngine.enemy.getMonsterHealth();
@@ -809,8 +808,8 @@ public class Monster {
             }
         } else if (monsterType.equals("Hell Monarch")) {
             int blackDragonBurningFlamesDMG = GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance();
-            if (blackDragonBurningFlamesDMG < 1) {
-                blackDragonBurningFlamesDMG = 1;
+            if (blackDragonBurningFlamesDMG < GameEngine.enemy.getMonsterLVL()) {
+                blackDragonBurningFlamesDMG = GameEngine.enemy.getMonsterLVL();
             }
             if (GameEngine.enemy.getMonsterMana() >= 5) {
                 System.out.printf("🕮 Hell Monarch cast BURNING FLAMES dealing %d damage to %s.%n",
@@ -822,8 +821,8 @@ public class Monster {
         } else if (monsterType.equals("Terror")) {
             if (GameEngine.enemy.getMonsterMana() >= 3) {
                 int terrorFreezingNovaDMG = GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance();
-                if (terrorFreezingNovaDMG < 1) {
-                    terrorFreezingNovaDMG = 1;
+                if (terrorFreezingNovaDMG < GameEngine.enemy.getMonsterLVL()) {
+                    terrorFreezingNovaDMG = GameEngine.enemy.getMonsterLVL();
                 }
                 System.out.printf("🕮 Terror cast FREEZING NOVA dealing %d damage and reducing %s Attack Speed by 0.1%n",
                         terrorFreezingNovaDMG, GameEngine.playerName);
@@ -834,8 +833,8 @@ public class Monster {
             }
         } else if (monsterType.equals("Demon Lord")) {
             int demonLordHellhoundDMG = 7 + GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance();
-            if (demonLordHellhoundDMG < 1) {
-                demonLordHellhoundDMG = 1;
+            if (demonLordHellhoundDMG < GameEngine.enemy.getMonsterLVL()) {
+                demonLordHellhoundDMG = GameEngine.enemy.getMonsterLVL();
             }
             if (GameEngine.enemy.getMonsterMana() >= 5) {
                 System.out.printf("🕮 Demon Lord Summon HELLHOUND that dealing %d to %s.%n", demonLordHellhoundDMG, GameEngine.playerName);
@@ -846,12 +845,11 @@ public class Monster {
 
         } else if (monsterType.equals("Lich King")) {
             int lichKingPoisonDMG = 0;
-            int lichKingTotalPoisonDMG = 0;
             if (GameEngine.enemy.getMonsterMana() >= 6) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 6);
                 lichKingPoisonDMG = GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance();
-                if (lichKingPoisonDMG < 1) {
-                    lichKingPoisonDMG = 1;
+                if (lichKingPoisonDMG < GameEngine.enemy.getMonsterLVL()) {
+                    lichKingPoisonDMG = GameEngine.enemy.getMonsterLVL();
                 }
                 lichKingTotalPoisonDMG += lichKingPoisonDMG;
                 System.out.printf("🕮 Lich King cast %d POISON to %s (total Poison %d).%n", lichKingPoisonDMG,
@@ -865,21 +863,17 @@ public class Monster {
             }
 
         } else if (monsterType.equals("Hydra")) {
-            if (GameEngine.enemy.getMonsterHealth() <= hydraLifeTracker) {
-                System.out.println("Another head grows on the HYDRA. Hers damage increase by 15.");
-                GameEngine.enemy.setMonsterDMG(15);
-                hydraLifeTracker = 125;
-                Thread.sleep(1000L);
-            } else if (GameEngine.enemy.getMonsterHealth() <= hydraLifeTracker) {
-                System.out.println("Another head grows on the HYDRA. Hers damage increase by 15.");
-                GameEngine.enemy.setMonsterDMG(15);
-                hydraLifeTracker = 0;
+            if (GameEngine.enemy.getMonsterHealth() <= hydraLifeTracker && hydraLifeTracker > 0) {
+                System.out.println("Another head grows on the HYDRA. Hers damage increase by 10 and Attack Speed by 0.1.%n");
+                GameEngine.enemy.setMonsterDMG(10);
+                GameEngine.enemy.setMonsterAttackSpeed(GameEngine.enemy.getMonsterBaseHealth() - 0.1);
+                hydraLifeTracker = hydraLifeTracker - 200;
                 Thread.sleep(1000L);
             }
         } else if (monsterType.equals("Fenix")) {
             if (GameEngine.enemy.getMonsterMana() >= 10) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 10);
-                int fenixBreath = (GameEngine.enemy.getMonsterSpellPower() * 2) - GameEngine.player1.getHeroMagicResistance();
+                int fenixBreath = (GameEngine.enemy.getMonsterSpellPower()) * 2 - GameEngine.player1.getHeroMagicResistance();
                 if (fenixBreath < 1) {
                     fenixBreath = 1;
                 }
@@ -890,7 +884,7 @@ public class Monster {
         } else if (monsterType.equals("Titan")) {
             if (GameEngine.enemy.getMonsterMana() >= 10) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 10);
-                int lightningBoltDMG = (GameEngine.enemy.getMonsterSpellPower() - GameEngine.player1.getHeroMagicResistance());
+                int lightningBoltDMG = (GameEngine.enemy.getMonsterSpellPower() * 2 - GameEngine.player1.getHeroMagicResistance());
                 if (lightningBoltDMG < 1) {
                     lightningBoltDMG = 1;
                 }
@@ -902,7 +896,7 @@ public class Monster {
             boolean blooded = false;
             if (GameEngine.enemy.getMonsterMana() >= 10) {
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 10);
-                System.out.printf("🕮 The Black Dragon cast Dragon Fury increasing his attack speed by 0.1); ");
+                System.out.printf("🕮 The Black Dragon cast Dragon Fury increasing his attack speed by 0.1%n; ");
                 Thread.sleep(1000L);
                 GameEngine.enemy.setMonsterAttackSpeed(GameEngine.enemy.getMonsterAttackSpeed() - 0.1);
                 if (GameEngine.enemy.getMonsterAttackSpeed() < 0.8) {
@@ -911,7 +905,7 @@ public class Monster {
             }
             if (GameEngine.enemy.getMonsterHealth() < 100 && blooded == false) {
                 blooded = true;
-                double jetOfFire = GameEngine.enemy.getMonsterSpellPower() * 2 - GameEngine.player1.getHeroMagicResistance();
+                int jetOfFire = GameEngine.enemy.getMonsterSpellPower() * 3 - GameEngine.player1.getHeroMagicResistance();
                 if (jetOfFire < 1) {
                     jetOfFire = 1;
                 }
@@ -924,7 +918,7 @@ public class Monster {
             if (GameEngine.enemy.getMonsterMana() >= 10 && behemothRagesQuantity < 4) {
                 behemothRagesQuantity++;
                 GameEngine.enemy.setMonsterMana(GameEngine.enemy.getMonsterMana() - 10);
-                System.out.println("🕮 Behemoth gain Rage increasing his Armor and DMG by 5");
+                System.out.println("🕮 Behemoth gain Rage increasing his Armor and DMG by 5%n");
                 Thread.sleep(1000L);
                 GameEngine.enemy.setMonsterDMG(5);
                 GameEngine.enemy.setMonsterArmor(5);
